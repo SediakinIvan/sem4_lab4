@@ -1,60 +1,44 @@
-﻿﻿#include <iostream>
-#include <vector>
+#include <iostream>
+#include <limits>
 
 template <typename T>
-class Vector {
-private:
-    std::vector<T> vec;
-
-public:
-    Vector() {}
-
-    explicit Vector(int size) : vec(size) {}
-
-    Vector(const std::vector<T>& v) : vec(v) {}
-
-    T& operator[](int index) {
-        return vec[index];
+int findSecondMaxIndex(T* arr, int size) {
+    if (size < 2) {
+        std::cerr << "Массив должен содержать как минимум два элемента" << std::endl;
+        return -1;
     }
 
-    const T& operator[](int index) const {
-        return vec[index];
-    }
+    int maxIndex = 0;
+    int secondMaxIndex = -1;
 
-    Vector<T> operator*(T scalar) {
-        Vector<T> result(vec.size());
-        for (int i = 0; i < vec.size(); ++i) {
-            result[i] = vec[i] * scalar;
+    for (int i = 1; i < size; ++i) {
+        if (arr[i] > arr[maxIndex]) {
+            secondMaxIndex = maxIndex;
+            maxIndex = i;
         }
-        return result;
-    }
-
-    T operator*(const Vector<T>& other) {
-        T result = 0;
-        for (int i = 0; i < vec.size(); ++i) {
-            result += vec[i] * other[i];
+        else if (secondMaxIndex == -1 || arr[i] > arr[secondMaxIndex]) {
+            if (arr[i] != arr[maxIndex]) {
+                secondMaxIndex = i;
+            }
         }
-        return result;
     }
 
-    int size() const {
-        return vec.size();
-    }
-};
+    return secondMaxIndex;
+}
 
 int main() {
-    Vector<int> v1({ 1, 2, 3 });
-    Vector<int> v2({ 4, 5, 6 });
+    setlocale(LC_ALL, "RU");
+    float arrFloat[] = { 1.2, 3.4, 5.6, 2.1 };
+    std::cout << "Индекс второго максимума в массиве float: " << findSecondMaxIndex(arrFloat, 4) << std::endl;
 
-    Vector<int> result = v1 * 2;
-    std::cout << "Scalar multiplication result: ";
-    for (int i = 0; i < result.size(); ++i) {
-        std::cout << result[i] << " ";
-    }
-    std::cout << std::endl;
+    double arrDouble[] = { 2.3, 4.5, 1.2, 5.6 };
+    std::cout << "Индекс второго максимума в массиве double: " << findSecondMaxIndex(arrDouble, 4) << std::endl;
 
-    int dotProduct = v1 * v2;
-    std::cout << "Dot product result: " << dotProduct << std::endl;
+    int arrInt[] = { 5, 3, 7, 1, 9 };
+    std::cout << "Индекс второго максимума в массиве int: " << findSecondMaxIndex(arrInt, 5) << std::endl;
+
+    char arrChar[] = { 'a', 'b', 'z', 'f' };
+    std::cout << "Индекс второго максимума в массиве char: " << findSecondMaxIndex(arrChar, 4) << std::endl;
 
     return 0;
 }
